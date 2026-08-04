@@ -1,13 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cgc828u8susnd"]
 
-[ext_resource type="Script" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="Script" uid="uid://ok1usvwjwj2i" path="res://scripts/player/player.gd" id="1_player"]
+[ext_resource type="PackedScene" uid="uid://cb48xv8klc4b7" path="res://assets/models/monkey.glb" id="2_dovo2"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 
-[node name="Player" type="CharacterBody3D"]
+[node name="Player" type="CharacterBody3D" unique_id=1252142308]
 script = ExtResource("1_player")
 
-[node name="Mesh" type="Node3D" parent="."]
+[node name="Mesh" type="Node3D" parent="." unique_id=2078234966]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="Sketchfab_Scene" parent="Mesh" unique_id=459882714 instance=ExtResource("2_dovo2")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=298797961]
 shape = SubResource("CapsuleShape3D_1")

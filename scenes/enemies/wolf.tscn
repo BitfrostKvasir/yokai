@@ -1,13 +1,16 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://cgv7vhkylgavi"]
 
-[ext_resource type="Script" path="res://scripts/enemies/wolf.gd" id="1_wolf"]
+[ext_resource type="Script" uid="uid://cqldjfa7yi4og" path="res://scripts/enemies/wolf.gd" id="1_wolf"]
+[ext_resource type="PackedScene" uid="uid://ca53a5vdfiho4" path="res://assets/models/wolf.gltf" id="2_jhhyp"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 
-[node name="Wolf" type="CharacterBody3D"]
+[node name="Wolf" type="CharacterBody3D" unique_id=1036656805]
 script = ExtResource("1_wolf")
 
-[node name="Mesh" type="Node3D" parent="."]
+[node name="Mesh" type="Node3D" parent="." unique_id=557732147]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="wolf" parent="Mesh" unique_id=684826206 instance=ExtResource("2_jhhyp")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1076217560]
 shape = SubResource("CapsuleShape3D_1")

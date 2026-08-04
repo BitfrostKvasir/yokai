@@ -1,15 +1,18 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene format=3 uid="uid://g60nkommlp5b"]
 
-[ext_resource type="Script" path="res://scripts/boss/bear_boss.gd" id="1_bear"]
+[ext_resource type="Script" uid="uid://yhxvd8bw1wqf" path="res://scripts/boss/bear_boss.gd" id="1_bear"]
+[ext_resource type="PackedScene" uid="uid://bb1rm1kuj5rd2" path="res://assets/models/stag.gltf" id="2_2ps1b"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_1"]
 radius = 1.2
 height = 3.0
 
-[node name="BearBoss" type="CharacterBody3D"]
+[node name="BearBoss" type="CharacterBody3D" unique_id=495891153]
 script = ExtResource("1_bear")
 
-[node name="Mesh" type="Node3D" parent="."]
+[node name="Mesh" type="Node3D" parent="." unique_id=1157463157]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="stag" parent="Mesh" unique_id=1694497218 instance=ExtResource("2_2ps1b")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=1722311708]
 shape = SubResource("CapsuleShape3D_1")
