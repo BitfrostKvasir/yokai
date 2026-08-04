@@ -31,6 +31,8 @@ func take_damage(amount: int, knockback: Vector3 = Vector3.ZERO) -> void:
 		_die()
 
 func _die() -> void:
+	if is_dead:
+		return
 	is_dead = true
 	remove_from_group("enemies")
 	GameState.collect_loot(enemy_type)

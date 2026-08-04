@@ -79,6 +79,8 @@ func _execute_action(action: State) -> void:
 	match action:
 		State.SWIPE:
 			await get_tree().create_timer(0.3).timeout
+			if is_dead:
+				return
 			if player and _get_player_distance() <= attack_range + 0.5:
 				player.take_damage(SWIPE_DAMAGE)
 			state = State.IDLE
@@ -86,6 +88,8 @@ func _execute_action(action: State) -> void:
 			velocity.x = 0.0
 			velocity.z = 0.0
 			await get_tree().create_timer(0.6).timeout
+			if is_dead:
+				return
 			if player and _get_player_distance() <= POUND_RADIUS:
 				player.take_damage(POUND_DAMAGE)
 			state = State.IDLE
@@ -93,10 +97,13 @@ func _execute_action(action: State) -> void:
 			velocity.x = 0.0
 			velocity.z = 0.0
 			await get_tree().create_timer(0.5).timeout
+			if is_dead:
+				return
 			if player and _get_player_distance() <= 8.0:
-				player.is_invincible = true
+				player.is_stunned = true
 				await get_tree().create_timer(ROAR_STUN).timeout
-				player.is_invincible = false
+				if is_instance_valid(player):
+					player.is_stunned = false
 			state = State.IDLE
 		State.CHARGE:
 			if player:
@@ -122,13 +129,17 @@ func _check_phase_transition() -> void:
 		phase_changed.emit(2)
 
 func _die() -> void:
+	if is_dead:
+		return
 	is_dead = true
 	remove_from_group("enemies")
 	GameState.on_bear_defeated()
 	GameState.collect_loot("bear")
 	bear_killed.emit()
+	died.emit(self)
 	await get_tree().create_timer(2.0).timeout
-	queue_free()
+	if is_instance_valid(self):
+		queue_free()
 
 func _summon_wolves() -> void:
 	if not wolf_scene:

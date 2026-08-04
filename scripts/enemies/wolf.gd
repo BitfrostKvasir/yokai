@@ -71,6 +71,8 @@ func _attack_state(_delta: float) -> void:
 		if player and _get_player_distance() <= attack_range:
 			player.take_damage(attack_damage)
 		await get_tree().create_timer(0.35).timeout
+		if is_dead:
+			return
 	_combo_running = false
 	cooldown_timer = ATTACK_COOLDOWN
 	state = State.COOLDOWN

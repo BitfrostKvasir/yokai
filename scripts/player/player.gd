@@ -25,6 +25,7 @@ var is_attacking: bool = false
 var hold_timer: float = 0.0
 var is_dodging: bool = false
 var is_guarding: bool = false
+var is_stunned: bool = false
 
 @onready var mesh: Node3D = $Mesh
 
@@ -56,6 +57,10 @@ func _handle_gravity(delta: float) -> void:
 		velocity.y -= GRAVITY * delta
 
 func _handle_movement() -> void:
+	if is_stunned:
+		velocity.x = 0.0
+		velocity.z = 0.0
+		return
 	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	var direction := (CAM_RIGHT * input_dir.x + CAM_FORWARD * -input_dir.y)
 	var spd := stats.speed
@@ -93,6 +98,8 @@ func _process(delta: float) -> void:
 			combo_count = 0
 
 func _unhandled_input(event: InputEvent) -> void:
+	if is_stunned:
+		return
 	if event.is_action_pressed("attack") and not is_attacking:
 		hold_timer = 0.0
 	if event.is_action_released("attack") and not is_attacking:

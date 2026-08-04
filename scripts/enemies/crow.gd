@@ -60,6 +60,7 @@ func _drop_bomb() -> void:
 		get_parent().add_child(bomb)
 		bomb.global_position = global_position
 		bomb.set_direction((player.global_position - global_position).normalized())
+		bomb.set_damage(attack_damage)
 	state = State.COOLDOWN
 	state_timer = COOLDOWN_DURATION
 
