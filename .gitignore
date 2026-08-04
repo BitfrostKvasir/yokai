@@ -1,4 +1,5 @@
 .superpowers/
+.worktrees/
 .godot/
 *.import
 export_presets.cfg
