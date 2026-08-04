@@ -23,6 +23,7 @@ signal minigame_complete(heal_amount: int)
 func _ready() -> void:
 	layer = 10
 	visible = false
+	add_to_group("beer_minigame")
 
 func open() -> void:
 	if on_cooldown:
