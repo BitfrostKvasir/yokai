@@ -114,11 +114,12 @@ Defeating the bear triggers a victory animation and spawns a loot chest.
 ### Boss Drops (guaranteed from chest)
 | Boss | Drops |
 |---|---|
-| Giant Bear | Bear Claw, Bear Pelt, Bear Tooth (rare) |
+| Giant Bear | Bear Claw, Bear Pelt (rare) |
 
 ### Weapons (crafted at the Crafting Stump)
 | Weapon | Parts Required | Stat Boost |
 |---|---|---|
+| Wooden Stick | Default (no crafting needed) | Baseline |
 | Bone Club | 3× Wolf Fang | +Attack |
 | Tusk Blade | 3× Boar Tusk + 1× Wolf Fang | +Attack, +Speed |
 | Bear Claw Hammer | 2× Bear Claw + 1× Bear Pelt | ++ Attack, +Defense |
