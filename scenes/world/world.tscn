@@ -1,0 +1,234 @@
+[gd_scene load_steps=17 format=3 uid="uid://world001"]
+
+[ext_resource type="Script" path="res://scripts/world/world.gd" id="1_world"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/wolf.tscn" id="2_wolf"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/boar.tscn" id="3_boar"]
+[ext_resource type="PackedScene" path="res://scenes/enemies/crow.tscn" id="4_crow"]
+[ext_resource type="PackedScene" path="res://scenes/boss/bear_boss.tscn" id="5_bear"]
+[ext_resource type="PackedScene" path="res://scenes/world/loot_chest.tscn" id="6_chest"]
+[ext_resource type="PackedScene" path="res://scenes/world/bartender_hut.tscn" id="7_hut"]
+[ext_resource type="PackedScene" path="res://scenes/world/crafting_stump.tscn" id="8_stump"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ground"]
+size = Vector2(60, 60)
+
+[sub_resource type="StandardMaterial3D" id="Mat_ground"]
+albedo_color = Color(0.102, 0.227, 0.102, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape_ground"]
+size = Vector3(60, 0.1, 60)
+
+[sub_resource type="Sky" id="Sky_world"]
+
+[sub_resource type="Environment" id="Env_world"]
+background_mode = 2
+sky = SubResource("Sky_world")
+sky_custom_fov = 0.0
+ambient_light_color = Color(0.102, 0.165, 0.227, 1)
+ambient_light_energy = 0.3
+
+[sub_resource type="CylinderMesh" id="CylMesh_trunk"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 2.5
+
+[sub_resource type="StandardMaterial3D" id="Mat_trunk"]
+albedo_color = Color(0.35, 0.22, 0.1, 1)
+
+[sub_resource type="ConeMesh" id="ConeMesh_top"]
+radius = 1.5
+height = 4.0
+
+[sub_resource type="StandardMaterial3D" id="Mat_treetop"]
+albedo_color = Color(0.102, 0.227, 0.102, 1)
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_world")
+wolf_scene = ExtResource("2_wolf")
+boar_scene = ExtResource("3_boar")
+crow_scene = ExtResource("4_crow")
+bear_scene = ExtResource("5_bear")
+loot_chest_scene = ExtResource("6_chest")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+position = Vector3(10, 14, 10)
+
+[node name="Moonlight" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-45, -30, 0)
+light_color = Color(0.69, 0.784, 1, 1)
+light_energy = 0.8
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Env_world")
+
+[node name="Ground" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_ground")
+surface_material_override/0 = SubResource("Mat_ground")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Ground"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Ground/StaticBody3D"]
+shape = SubResource("BoxShape_ground")
+
+[node name="SpawnPoints" type="Node3D" parent="."]
+
+[node name="WolfSpawns" type="Node3D" parent="SpawnPoints"]
+
+[node name="WolfSpawn0" type="Marker3D" parent="SpawnPoints/WolfSpawns"]
+position = Vector3(-10, 0, -5)
+
+[node name="WolfSpawn1" type="Marker3D" parent="SpawnPoints/WolfSpawns"]
+position = Vector3(-15, 0, 5)
+
+[node name="WolfSpawn2" type="Marker3D" parent="SpawnPoints/WolfSpawns"]
+position = Vector3(-5, 0, 15)
+
+[node name="WolfSpawn3" type="Marker3D" parent="SpawnPoints/WolfSpawns"]
+position = Vector3(5, 0, -15)
+
+[node name="WolfSpawn4" type="Marker3D" parent="SpawnPoints/WolfSpawns"]
+position = Vector3(10, 0, 10)
+
+[node name="WolfSpawn5" type="Marker3D" parent="SpawnPoints/WolfSpawns"]
+position = Vector3(-8, 0, -15)
+
+[node name="BoarSpawns" type="Node3D" parent="SpawnPoints"]
+
+[node name="BoarSpawn0" type="Marker3D" parent="SpawnPoints/BoarSpawns"]
+position = Vector3(8, 0, -8)
+
+[node name="BoarSpawn1" type="Marker3D" parent="SpawnPoints/BoarSpawns"]
+position = Vector3(-12, 0, 12)
+
+[node name="BoarSpawn2" type="Marker3D" parent="SpawnPoints/BoarSpawns"]
+position = Vector3(0, 0, 18)
+
+[node name="CrowSpawns" type="Node3D" parent="SpawnPoints"]
+
+[node name="CrowSpawn0" type="Marker3D" parent="SpawnPoints/CrowSpawns"]
+position = Vector3(12, 0, 0)
+
+[node name="CrowSpawn1" type="Marker3D" parent="SpawnPoints/CrowSpawns"]
+position = Vector3(-6, 0, -12)
+
+[node name="CrowSpawn2" type="Marker3D" parent="SpawnPoints/CrowSpawns"]
+position = Vector3(6, 0, 20)
+
+[node name="BossSpawn" type="Marker3D" parent="SpawnPoints"]
+position = Vector3(0, 0, 25)
+
+[node name="ChestSpawn" type="Marker3D" parent="SpawnPoints"]
+position = Vector3(2, 0, 23)
+
+[node name="Trees" type="Node3D" parent="."]
+
+[node name="Tree0" type="Node3D" parent="Trees"]
+position = Vector3(-25, 0, -25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree0"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree0"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree1" type="Node3D" parent="Trees"]
+position = Vector3(25, 0, -25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree1"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree1"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree2" type="Node3D" parent="Trees"]
+position = Vector3(-25, 0, 25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree2"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree2"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree3" type="Node3D" parent="Trees"]
+position = Vector3(25, 0, 25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree3"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree3"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree4" type="Node3D" parent="Trees"]
+position = Vector3(-25, 0, 0)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree4"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree4"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree5" type="Node3D" parent="Trees"]
+position = Vector3(25, 0, 0)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree5"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree5"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree6" type="Node3D" parent="Trees"]
+position = Vector3(0, 0, -25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree6"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree6"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="Tree7" type="Node3D" parent="Trees"]
+position = Vector3(0, 0, 25)
+
+[node name="Trunk" type="MeshInstance3D" parent="Trees/Tree7"]
+position = Vector3(0, 1.25, 0)
+mesh = SubResource("CylMesh_trunk")
+surface_material_override/0 = SubResource("Mat_trunk")
+
+[node name="Top" type="MeshInstance3D" parent="Trees/Tree7"]
+position = Vector3(0, 4.5, 0)
+mesh = SubResource("ConeMesh_top")
+surface_material_override/0 = SubResource("Mat_treetop")
+
+[node name="BartenderHut" parent="." instance=ExtResource("7_hut")]
+position = Vector3(-18, 0, -5)
+
+[node name="CraftingStump" parent="." instance=ExtResource("8_stump")]
+position = Vector3(18, 0, -5)
