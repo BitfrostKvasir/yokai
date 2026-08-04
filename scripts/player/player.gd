@@ -10,7 +10,7 @@ const COMBO_WINDOW     := 0.5
 const COMBO_HITS       := 3
 const HEAVY_MULTIPLIER := 2.0
 const SP_GAIN_PER_HIT  := 15.0
-const ATTACK_RANGE     := 1.8
+const ATTACK_RANGE     := 2.5
 const KNOCKBACK_FORCE  := 6.0
 const DODGE_SPEED     := 12.0
 const DODGE_DURATION  := 0.25
@@ -135,8 +135,10 @@ func _do_attack(heavy: bool) -> void:
 func _face_nearest_enemy() -> void:
 	var nearest: Node3D = null
 	var nearest_dist := 999.0
+	var self_xz := Vector2(global_position.x, global_position.z)
 	for e in get_tree().get_nodes_in_group("enemies"):
-		var d := global_position.distance_to(e.global_position)
+		var e_xz := Vector2(e.global_position.x, e.global_position.z)
+		var d := self_xz.distance_to(e_xz)
 		if d < nearest_dist:
 			nearest_dist = d
 			nearest = e
@@ -149,8 +151,10 @@ func _face_nearest_enemy() -> void:
 func _hit_enemies_in_range(damage: int, knockback: bool) -> int:
 	var hit_count := 0
 	var forward := -mesh.global_transform.basis.z
+	var self_xz := Vector2(global_position.x, global_position.z)
 	for e in get_tree().get_nodes_in_group("enemies"):
-		var dist := global_position.distance_to(e.global_position)
+		var e_xz := Vector2(e.global_position.x, e.global_position.z)
+		var dist := self_xz.distance_to(e_xz)
 		if dist <= ATTACK_RANGE:
 			if e.has_method("take_damage"):
 				var kb := forward * KNOCKBACK_FORCE if knockback else Vector3.ZERO
