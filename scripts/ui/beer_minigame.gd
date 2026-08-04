@@ -57,8 +57,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("attack"):
 		is_filling = true
-	if event.is_action_released("attack"):
+		get_viewport().set_input_as_handled()
+	elif event.is_action_released("attack"):
 		_release()
+		get_viewport().set_input_as_handled()
 
 func _release() -> void:
 	if not is_filling and fill_level == 0.0:
