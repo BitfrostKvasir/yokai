@@ -16,9 +16,10 @@ var on_cooldown: bool = false
 
 signal minigame_complete(heal_amount: int)
 
-@onready var fill_bar: ProgressBar = $Panel/FillBar
-@onready var result_label: Label = $Panel/ResultLabel
-@onready var cooldown_label: Label = $Panel/CooldownLabel
+@onready var fill_bar: ProgressBar = $Background/BarContainer/FillBar
+@onready var result_label: PanelContainer = $Background/ResultLabel
+@onready var result_text: Label = $Background/ResultLabel/ResultText
+@onready var cooldown_label: PanelContainer = $Background/CooldownLabel
 
 func _ready() -> void:
 	layer = 10
@@ -37,6 +38,7 @@ func open() -> void:
 	visible = true
 	if result_label:
 		result_label.visible = false
+		result_text.modulate = Color(1, 1, 1, 1)
 	if cooldown_label:
 		cooldown_label.visible = false
 	_update_fill_bar()
@@ -89,15 +91,15 @@ func _update_fill_bar() -> void:
 		fill_bar.value = fill_level * 100.0
 
 func _show_result(heal: int) -> void:
-	if not result_label:
+	if not result_label or not result_text:
 		return
 	if heal == HEAL_PERFECT:
-		result_label.text = "Perfect Pour!  Full HP!"
-		result_label.modulate = Color(1.0, 0.9, 0.0)
+		result_text.text = "Perfect Pour!   Full HP restored!"
+		result_text.modulate = Color(1.0, 0.9, 0.0)
 	elif heal == HEAL_LOW:
-		result_label.text = "Too little... +" + str(heal) + " HP"
-		result_label.modulate = Color(1.0, 0.4, 0.4)
+		result_text.text = "Too little...  +" + str(heal) + " HP"
+		result_text.modulate = Color(1.0, 0.5, 0.5)
 	else:
-		result_label.text = "Overflow! +" + str(heal) + " HP"
-		result_label.modulate = Color(0.6, 0.8, 1.0)
+		result_text.text = "Overflow!  +" + str(heal) + " HP"
+		result_text.modulate = Color(0.6, 0.85, 1.0)
 	result_label.visible = true

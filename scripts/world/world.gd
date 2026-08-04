@@ -3,18 +3,15 @@ extends Node3D
 
 const WOLF_COUNT := 6
 const BOAR_COUNT := 3
-const CROW_COUNT := 3
 const RESPAWN_TIME := 30.0
 
 @export var wolf_scene: PackedScene
 @export var boar_scene: PackedScene
-@export var crow_scene: PackedScene
 @export var bear_scene: PackedScene
 @export var loot_chest_scene: PackedScene
 
 @onready var wolf_spawns: Node3D = $SpawnPoints/WolfSpawns
 @onready var boar_spawns: Node3D = $SpawnPoints/BoarSpawns
-@onready var crow_spawns: Node3D = $SpawnPoints/CrowSpawns
 @onready var boss_spawn: Marker3D = $SpawnPoints/BossSpawn
 @onready var chest_spawn: Marker3D = $SpawnPoints/ChestSpawn
 var bear_boss: BearBoss = null
@@ -26,7 +23,6 @@ func _ready() -> void:
 func _spawn_all_enemies() -> void:
 	_spawn_enemies(wolf_scene, wolf_spawns, WOLF_COUNT)
 	_spawn_enemies(boar_scene, boar_spawns, BOAR_COUNT)
-	_spawn_enemies(crow_scene, crow_spawns, CROW_COUNT)
 
 func _spawn_enemies(scene: PackedScene, spawn_parent: Node3D, count: int) -> void:
 	if not scene or not spawn_parent:

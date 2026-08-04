@@ -3,7 +3,6 @@
 [ext_resource type="Script" path="res://scripts/world/world.gd" id="1_world"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/wolf.tscn" id="2_wolf"]
 [ext_resource type="PackedScene" path="res://scenes/enemies/boar.tscn" id="3_boar"]
-[ext_resource type="PackedScene" path="res://scenes/enemies/crow.tscn" id="4_crow"]
 [ext_resource type="PackedScene" path="res://scenes/boss/bear_boss.tscn" id="5_bear"]
 [ext_resource type="PackedScene" path="res://scenes/world/loot_chest.tscn" id="6_chest"]
 [ext_resource type="PackedScene" path="res://scenes/world/bartender_hut.tscn" id="7_hut"]
@@ -47,7 +46,6 @@ albedo_color = Color(0.102, 0.227, 0.102, 1)
 script = ExtResource("1_world")
 wolf_scene = ExtResource("2_wolf")
 boar_scene = ExtResource("3_boar")
-crow_scene = ExtResource("4_crow")
 bear_scene = ExtResource("5_bear")
 loot_chest_scene = ExtResource("6_chest")
 
@@ -104,17 +102,6 @@ position = Vector3(-12, 0, 12)
 
 [node name="BoarSpawn2" type="Marker3D" parent="SpawnPoints/BoarSpawns"]
 position = Vector3(0, 0, 18)
-
-[node name="CrowSpawns" type="Node3D" parent="SpawnPoints"]
-
-[node name="CrowSpawn0" type="Marker3D" parent="SpawnPoints/CrowSpawns"]
-position = Vector3(12, 0, 0)
-
-[node name="CrowSpawn1" type="Marker3D" parent="SpawnPoints/CrowSpawns"]
-position = Vector3(-6, 0, -12)
-
-[node name="CrowSpawn2" type="Marker3D" parent="SpawnPoints/CrowSpawns"]
-position = Vector3(6, 0, 20)
 
 [node name="BossSpawn" type="Marker3D" parent="SpawnPoints"]
 position = Vector3(0, 0, 25)
