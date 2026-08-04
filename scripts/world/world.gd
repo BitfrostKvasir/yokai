@@ -33,18 +33,18 @@ func _spawn_enemies(scene: PackedScene, spawn_parent: Node3D, count: int) -> voi
 		add_child(enemy)
 		enemy.global_position = markers[i].global_position
 		enemy.died.connect(_on_enemy_died.bind(scene, markers[i].global_position))
-		enemy.battle_triggered.connect(_on_battle_triggered)
+		enemy.battle_triggered.connect(_on_battle_triggered.bind(scene.resource_path))
 
-func _on_battle_triggered(enemy: EnemyBase) -> void:
+func _on_battle_triggered(enemy: EnemyBase, scene_path: String) -> void:
 	var p := get_tree().get_first_node_in_group("player") as Player
 	if p:
 		GameState.world_player_position = p.global_position
 		GameState.player_hp_saved = p.stats.current_hp
 		GameState.player_sp_saved = p.stats.sp
-	GameState.pending_battle_enemy_scene = enemy.scene_file_path
+	GameState.pending_battle_enemy_scene = scene_path
 	GameState.pending_battle_enemy_type = enemy.enemy_type
 	GameState.in_battle = true
-	get_tree().change_scene_to_file("res://scenes/battle/battle_arena.tscn")
+	get_tree().change_scene_to_file.call_deferred("res://scenes/battle/battle_arena.tscn")
 
 func _on_enemy_died(scene: PackedScene, spawn_pos: Vector3) -> void:
 	await get_tree().create_timer(RESPAWN_TIME).timeout
@@ -52,6 +52,7 @@ func _on_enemy_died(scene: PackedScene, spawn_pos: Vector3) -> void:
 	add_child(enemy)
 	enemy.global_position = spawn_pos
 	enemy.died.connect(_on_enemy_died.bind(scene, spawn_pos))
+	enemy.battle_triggered.connect(_on_battle_triggered.bind(scene.resource_path))
 
 func _spawn_boss() -> void:
 	if not bear_scene:
