@@ -6,10 +6,20 @@ const CAM_RIGHT   := Vector3( 0.707, 0.0, -0.707)
 const CAMERA_OFFSET := Vector3(10.0, 14.0, 10.0)
 const CAMERA_SMOOTH := 8.0
 const GRAVITY := 9.8
+const COMBO_WINDOW     := 0.5
+const COMBO_HITS       := 3
+const HEAVY_MULTIPLIER := 2.0
+const SP_GAIN_PER_HIT  := 15.0
+const ATTACK_RANGE     := 1.8
+const KNOCKBACK_FORCE  := 6.0
 
 var stats: PlayerStats
 var is_invincible: bool = false
 var camera: Camera3D
+var combo_count: int = 0
+var combo_timer: float = 0.0
+var is_attacking: bool = false
+var hold_timer: float = 0.0
 
 @onready var mesh: Node3D = $Mesh
 
@@ -65,3 +75,68 @@ func _on_weapon_changed(weapon_stats: Dictionary) -> void:
 
 func _on_died() -> void:
 	set_physics_process(false)
+
+func _process(delta: float) -> void:
+	if Input.is_action_pressed("attack") and not is_attacking:
+		hold_timer += delta
+	if combo_timer > 0.0:
+		combo_timer -= delta
+		if combo_timer <= 0.0:
+			combo_count = 0
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event.is_action_pressed("attack") and not is_attacking:
+		hold_timer = 0.0
+	if event.is_action_released("attack") and not is_attacking:
+		if hold_timer >= 0.4:
+			_do_attack(true)
+		else:
+			_do_attack(false)
+	if event.is_action_pressed("special"):
+		_do_special()
+
+func _do_attack(heavy: bool) -> void:
+	is_attacking = true
+	_face_nearest_enemy()
+	var dmg := int(stats.attack * (HEAVY_MULTIPLIER if heavy else 1.0))
+	var enemies_hit := _hit_enemies_in_range(dmg, heavy)
+	if enemies_hit > 0:
+		stats.gain_sp(SP_GAIN_PER_HIT)
+	if not heavy:
+		combo_count = (combo_count % COMBO_HITS) + 1
+		combo_timer = COMBO_WINDOW
+	await get_tree().create_timer(0.35 if not heavy else 0.6).timeout
+	is_attacking = false
+
+func _face_nearest_enemy() -> void:
+	var nearest: Node3D = null
+	var nearest_dist := 999.0
+	for e in get_tree().get_nodes_in_group("enemies"):
+		var d := global_position.distance_to(e.global_position)
+		if d < nearest_dist:
+			nearest_dist = d
+			nearest = e
+	if nearest:
+		var look_pos := nearest.global_position
+		look_pos.y = global_position.y
+		mesh.look_at(look_pos, Vector3.UP)
+
+func _hit_enemies_in_range(damage: int, knockback: bool) -> int:
+	var hit_count := 0
+	var forward := -mesh.global_transform.basis.z
+	for e in get_tree().get_nodes_in_group("enemies"):
+		var dist := global_position.distance_to(e.global_position)
+		if dist <= ATTACK_RANGE:
+			if e.has_method("take_damage"):
+				var kb := forward * KNOCKBACK_FORCE if knockback else Vector3.ZERO
+				e.take_damage(damage, kb)
+				hit_count += 1
+	return hit_count
+
+func _do_special() -> void:
+	if not stats.use_sp():
+		return
+	is_attacking = true
+	_hit_enemies_in_range(int(stats.attack * 3.0), true)
+	await get_tree().create_timer(0.8).timeout
+	is_attacking = false
