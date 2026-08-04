@@ -11,14 +11,29 @@ extends CharacterBody3D
 var current_hp: int
 var is_dead: bool = false
 var player: Player
+var _battle_emitted: bool = false
 
 signal died(enemy: EnemyBase)
 signal damaged(enemy: EnemyBase)
+signal battle_triggered(enemy: EnemyBase)
 
 func _ready() -> void:
 	current_hp = max_hp
 	add_to_group("enemies")
 	player = get_tree().get_first_node_in_group("player")
+
+func _check_battle_trigger() -> bool:
+	if GameState.in_battle or _battle_emitted or is_dead:
+		return false
+	if _get_player_distance() <= aggro_range:
+		_battle_emitted = true
+		set_physics_process(false)
+		battle_triggered.emit(self)
+		return true
+	return false
+
+func enter_battle_mode() -> void:
+	pass  # Overridden by subclasses to immediately aggro
 
 func take_damage(amount: int, knockback: Vector3 = Vector3.ZERO) -> void:
 	if is_dead:
@@ -27,9 +42,25 @@ func take_damage(amount: int, knockback: Vector3 = Vector3.ZERO) -> void:
 	if knockback.length() > 0.1:
 		velocity += knockback
 	damaged.emit(self)
+	_show_damage_number(amount)
 	_flash_hit()
 	if current_hp <= 0:
 		_die()
+
+func _show_damage_number(amount: int) -> void:
+	var label := Label3D.new()
+	get_parent().add_child(label)
+	label.global_position = global_position + Vector3(randf_range(-0.3, 0.3), 2.0, 0.0)
+	label.text = str(amount)
+	label.modulate = Color(1.0, 0.9, 0.1)
+	label.font_size = 64
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
+	var tween := label.create_tween()
+	tween.set_parallel(true)
+	tween.tween_property(label, "global_position", label.global_position + Vector3(0.0, 1.5, 0.0), 0.8)
+	tween.tween_property(label, "modulate", Color(1.0, 0.9, 0.1, 0.0), 0.8)
+	tween.finished.connect(label.queue_free)
 
 func _flash_hit() -> void:
 	modulate = Color(2.0, 0.3, 0.3, 1.0)

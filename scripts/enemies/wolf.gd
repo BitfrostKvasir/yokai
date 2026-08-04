@@ -22,7 +22,12 @@ func _ready() -> void:
 	super._ready()
 	_new_patrol_target()
 
+func enter_battle_mode() -> void:
+	state = State.AGGRO
+
 func _physics_process(delta: float) -> void:
+	if _check_battle_trigger():
+		return
 	_apply_gravity(delta)
 	match state:
 		State.PATROL:   _patrol(delta)

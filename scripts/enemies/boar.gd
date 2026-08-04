@@ -21,7 +21,13 @@ func _ready() -> void:
 	aggro_range = 7.0
 	super._ready()
 
+func enter_battle_mode() -> void:
+	state = State.TELEGRAPH
+	state_timer = TELEGRAPH_DURATION
+
 func _physics_process(delta: float) -> void:
+	if _check_battle_trigger():
+		return
 	_apply_gravity(delta)
 	state_timer -= delta
 	match state:

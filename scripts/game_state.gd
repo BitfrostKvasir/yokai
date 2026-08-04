@@ -7,6 +7,15 @@ var current_weapon_id: String = "wooden_stick"
 var current_weapon_stats: Dictionary = {}
 var bear_defeated: bool = false
 
+# Battle arena state
+var in_battle: bool = false
+var returning_from_battle: bool = false
+var pending_battle_enemy_scene: String = ""
+var pending_battle_enemy_type: String = ""
+var world_player_position: Vector3 = Vector3.ZERO
+var player_hp_saved: int = 0
+var player_sp_saved: float = 0.0
+
 signal weapon_changed(weapon_stats: Dictionary)
 
 func _ready() -> void:

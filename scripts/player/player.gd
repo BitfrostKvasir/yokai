@@ -35,8 +35,12 @@ func _ready() -> void:
 	GameState.weapon_changed.connect(_on_weapon_changed)
 	stats.died.connect(_on_died)
 	add_to_group("player")
-	# Find camera in parent scene
 	await get_tree().process_frame
+	if GameState.returning_from_battle:
+		global_position = GameState.world_player_position
+		stats.current_hp = GameState.player_hp_saved
+		stats.sp = GameState.player_sp_saved
+		GameState.returning_from_battle = false
 	camera = get_tree().get_first_node_in_group("main_camera")
 
 func _physics_process(delta: float) -> void:
