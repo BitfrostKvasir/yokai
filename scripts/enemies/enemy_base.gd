@@ -12,6 +12,7 @@ var current_hp: int
 var is_dead: bool = false
 var player: Player
 var _battle_emitted: bool = false
+var _hit_light: OmniLight3D
 
 signal died(enemy: EnemyBase)
 signal damaged(enemy: EnemyBase)
@@ -21,6 +22,11 @@ func _ready() -> void:
 	current_hp = max_hp
 	add_to_group("enemies")
 	player = get_tree().get_first_node_in_group("player")
+	_hit_light = OmniLight3D.new()
+	_hit_light.light_color = Color(1.0, 0.1, 0.1)
+	_hit_light.light_energy = 0.0
+	_hit_light.omni_range = 3.0
+	add_child(_hit_light)
 
 func _check_battle_trigger() -> bool:
 	if GameState.in_battle or _battle_emitted or is_dead:
@@ -63,16 +69,18 @@ func _show_damage_number(amount: int) -> void:
 	tween.finished.connect(label.queue_free)
 
 func _flash_hit() -> void:
-	modulate = Color(2.0, 0.3, 0.3, 1.0)
+	if _hit_light:
+		_hit_light.light_energy = 6.0
 	await get_tree().create_timer(0.12).timeout
-	if is_instance_valid(self) and not is_dead:
-		modulate = Color(1.0, 1.0, 1.0, 1.0)
+	if is_instance_valid(self) and not is_dead and _hit_light:
+		_hit_light.light_energy = 0.0
 
 func _die() -> void:
 	if is_dead:
 		return
 	is_dead = true
-	modulate = Color(1.0, 1.0, 1.0, 1.0)
+	if _hit_light:
+		_hit_light.light_energy = 0.0
 	remove_from_group("enemies")
 	GameState.collect_loot(enemy_type)
 	died.emit(self)
