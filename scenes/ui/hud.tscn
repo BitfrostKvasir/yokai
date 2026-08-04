@@ -1,39 +1,130 @@
-[gd_scene load_steps=2 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://scripts/ui/hud.gd" id="1_hud"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_fill"]
+bg_color = Color(0.85, 0.1, 0.1, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hp_bg"]
+bg_color = Color(0.15, 0.05, 0.05, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sp_fill"]
+bg_color = Color(1.0, 0.7, 0.0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sp_bg"]
+bg_color = Color(0.15, 0.12, 0.0, 0.85)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.0, 0.0, 0.0, 0.55)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_parts_panel"]
+bg_color = Color(0.0, 0.0, 0.0, 0.55)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+content_margin_left = 12.0
+content_margin_top = 10.0
+content_margin_right = 12.0
+content_margin_bottom = 10.0
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_hud")
 
-[node name="TopLeft" type="VBoxContainer" parent="."]
-offset_left = 12.0
-offset_top = 12.0
-offset_right = 300.0
-offset_bottom = 120.0
+[node name="TopLeftPanel" type="PanelContainer" parent="."]
+offset_left = 14.0
+offset_top = 14.0
+offset_right = 290.0
+offset_bottom = 160.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
-[node name="HPBar" type="ProgressBar" parent="TopLeft"]
-custom_minimum_size = Vector2(200, 20)
+[node name="TopLeft" type="VBoxContainer" parent="TopLeftPanel"]
+theme_override_constants/separation = 6
+
+[node name="HPRow" type="HBoxContainer" parent="TopLeftPanel/TopLeft"]
+theme_override_constants/separation = 8
+
+[node name="HPIcon" type="Label" parent="TopLeftPanel/TopLeft/HPRow"]
+text = "HP"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.3, 0.3, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+vertical_alignment = 1
+
+[node name="HPBar" type="ProgressBar" parent="TopLeftPanel/TopLeft/HPRow"]
+custom_minimum_size = Vector2(210, 26)
+size_flags_horizontal = 3
 max_value = 100.0
 value = 100.0
 show_percentage = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_hp_fill")
+theme_override_styles/background = SubResource("StyleBoxFlat_hp_bg")
 
-[node name="SPBar" type="ProgressBar" parent="TopLeft"]
-custom_minimum_size = Vector2(200, 16)
+[node name="SPRow" type="HBoxContainer" parent="TopLeftPanel/TopLeft"]
+theme_override_constants/separation = 8
+
+[node name="SPIcon" type="Label" parent="TopLeftPanel/TopLeft/SPRow"]
+text = "SP"
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.85, 0.1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+vertical_alignment = 1
+
+[node name="SPBar" type="ProgressBar" parent="TopLeftPanel/TopLeft/SPRow"]
+custom_minimum_size = Vector2(210, 22)
+size_flags_horizontal = 3
 max_value = 100.0
 value = 0.0
 show_percentage = false
+theme_override_styles/fill = SubResource("StyleBoxFlat_sp_fill")
+theme_override_styles/background = SubResource("StyleBoxFlat_sp_bg")
 
-[node name="WeaponLabel" type="Label" parent="TopLeft"]
+[node name="WeaponLabel" type="Label" parent="TopLeftPanel/TopLeft"]
 text = "Wooden Stick"
+theme_override_font_sizes/font_size = 17
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
 
-[node name="BottomRight" type="VBoxContainer" parent="."]
-anchors_preset = 4
+[node name="BottomRightPanel" type="PanelContainer" parent="."]
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -200.0
-offset_top = 12.0
-offset_right = -12.0
+anchor_bottom = 0.0
+offset_left = -210.0
+offset_top = 14.0
+offset_right = -14.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_parts_panel")
 
-[node name="PartsLabel" type="Label" parent="BottomRight"]
+[node name="PartsLabel" type="Label" parent="BottomRightPanel"]
 text = ""
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
 horizontal_alignment = 2

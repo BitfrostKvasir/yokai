@@ -1,10 +1,10 @@
 class_name HUD
 extends CanvasLayer
 
-@onready var hp_bar: ProgressBar = $TopLeft/HPBar
-@onready var sp_bar: ProgressBar = $TopLeft/SPBar
-@onready var weapon_label: Label = $TopLeft/WeaponLabel
-@onready var parts_label: Label = $BottomRight/PartsLabel
+@onready var hp_bar: ProgressBar = $TopLeftPanel/TopLeft/HPRow/HPBar
+@onready var sp_bar: ProgressBar = $TopLeftPanel/TopLeft/SPRow/SPBar
+@onready var weapon_label: Label = $TopLeftPanel/TopLeft/WeaponLabel
+@onready var parts_label: Label = $BottomRightPanel/PartsLabel
 
 var player_stats: PlayerStats
 var enemy_bars: Dictionary = {}

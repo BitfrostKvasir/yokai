@@ -3,7 +3,7 @@ extends CharacterBody3D
 
 const CAM_FORWARD := Vector3(-0.707, 0.0, -0.707)
 const CAM_RIGHT   := Vector3( 0.707, 0.0, -0.707)
-const CAMERA_OFFSET := Vector3(10.0, 14.0, 10.0)
+const CAMERA_OFFSET := Vector3(6.0, 9.0, 6.0)
 const CAMERA_SMOOTH := 8.0
 const GRAVITY := 9.8
 const COMBO_WINDOW     := 0.5
@@ -90,8 +90,14 @@ func _on_died() -> void:
 	set_physics_process(false)
 
 func _process(delta: float) -> void:
+	# Heavy attack fires automatically after holding 0.6s (between light hits)
 	if Input.is_action_pressed("attack") and not is_attacking:
 		hold_timer += delta
+		if hold_timer >= 0.6:
+			hold_timer = 0.0
+			_do_attack(true)
+	elif not Input.is_action_pressed("attack"):
+		hold_timer = 0.0
 	if combo_timer > 0.0:
 		combo_timer -= delta
 		if combo_timer <= 0.0:
@@ -100,13 +106,10 @@ func _process(delta: float) -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if is_stunned:
 		return
+	# Light attack fires IMMEDIATELY on press — no waiting for release
 	if event.is_action_pressed("attack") and not is_attacking:
 		hold_timer = 0.0
-	if event.is_action_released("attack") and not is_attacking:
-		if hold_timer >= 0.4:
-			_do_attack(true)
-		else:
-			_do_attack(false)
+		_do_attack(false)
 	if event.is_action_pressed("special"):
 		_do_special()
 	if event.is_action_pressed("dodge") and not is_dodging and not is_attacking:
