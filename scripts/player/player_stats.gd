@@ -14,7 +14,7 @@ signal sp_changed(current: float, maximum: float)
 signal died
 
 func take_damage(amount: int) -> void:
-	var dmg := max(1, amount - defense)
+	var dmg: int = max(1, amount - defense)
 	current_hp = max(0, current_hp - dmg)
 	hp_changed.emit(current_hp, max_hp)
 	if current_hp == 0:
@@ -42,6 +42,6 @@ func is_dead() -> bool:
 	return current_hp <= 0
 
 func apply_weapon(weapon_stats: Dictionary) -> void:
-	attack = weapon_stats.get("attack", attack)
-	defense = weapon_stats.get("defense", defense)
-	speed = weapon_stats.get("speed", speed)
+	attack = int(weapon_stats.get("attack", attack))
+	defense = int(weapon_stats.get("defense", defense))
+	speed = float(weapon_stats.get("speed", speed))

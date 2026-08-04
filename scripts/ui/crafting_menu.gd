@@ -27,7 +27,7 @@ func _refresh(_parts: Dictionary) -> void:
 	for child in recipe_list.get_children():
 		child.queue_free()
 	for weapon_id in GameState.crafting.RECIPES:
-		var recipe = GameState.crafting.RECIPES[weapon_id]
+		var recipe: Dictionary = GameState.crafting.RECIPES[weapon_id]
 		if not recipe["unlocked"]:
 			continue
 		var btn := Button.new()
@@ -38,7 +38,7 @@ func _refresh(_parts: Dictionary) -> void:
 		recipe_list.add_child(btn)
 
 func _on_craft(weapon_id: String) -> void:
-	var stats = GameState.crafting.craft(weapon_id, GameState.inventory)
+	var stats: Dictionary = GameState.crafting.craft(weapon_id, GameState.inventory)
 	if stats.is_empty():
 		return
 	GameState.equip_weapon(weapon_id)

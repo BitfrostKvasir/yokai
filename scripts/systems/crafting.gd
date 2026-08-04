@@ -20,8 +20,8 @@ func unlock_bear_recipes() -> void:
 	RECIPES["bear_claw_hammer"]["unlocked"] = true
 
 func can_craft(weapon_id: String, inventory: Inventory) -> bool:
-	var recipe = RECIPES.get(weapon_id)
-	if not recipe:
+	var recipe: Dictionary = RECIPES.get(weapon_id, {})
+	if recipe.is_empty():
 		return false
 	if not recipe["unlocked"]:
 		return false
@@ -30,7 +30,7 @@ func can_craft(weapon_id: String, inventory: Inventory) -> bool:
 func craft(weapon_id: String, inventory: Inventory) -> Dictionary:
 	if not can_craft(weapon_id, inventory):
 		return {}
-	var recipe = RECIPES[weapon_id]
+	var recipe: Dictionary = RECIPES[weapon_id]
 	inventory.consume_parts(recipe["requires"])
 	return WEAPONS[weapon_id].duplicate()
 

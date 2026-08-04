@@ -17,7 +17,7 @@ const RESPAWN_TIME := 30.0
 @onready var crow_spawns: Node3D = $SpawnPoints/CrowSpawns
 @onready var boss_spawn: Marker3D = $SpawnPoints/BossSpawn
 @onready var chest_spawn: Marker3D = $SpawnPoints/ChestSpawn
-var bear_boss = null
+var bear_boss: BearBoss = null
 
 func _ready() -> void:
 	_spawn_all_enemies()

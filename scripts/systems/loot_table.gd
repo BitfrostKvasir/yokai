@@ -13,7 +13,7 @@ const BOSS_DROPS: Dictionary = {
 
 func roll_enemy_drops(enemy_type: String) -> Array[String]:
 	var drops: Array[String] = []
-	var table = ENEMY_DROPS.get(enemy_type, [])
+	var table: Array = ENEMY_DROPS.get(enemy_type, [])
 	for entry in table:
 		if randf() <= entry["chance"]:
 			drops.append(entry["part"])
