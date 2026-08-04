@@ -46,7 +46,7 @@ func _on_battle_triggered(enemy: EnemyBase, scene_path: String) -> void:
 	GameState.in_battle = true
 	get_tree().change_scene_to_file.call_deferred("res://scenes/battle/battle_arena.tscn")
 
-func _on_enemy_died(scene: PackedScene, spawn_pos: Vector3) -> void:
+func _on_enemy_died(_enemy: EnemyBase, scene: PackedScene, spawn_pos: Vector3) -> void:
 	await get_tree().create_timer(RESPAWN_TIME).timeout
 	var enemy := scene.instantiate()
 	add_child(enemy)
