@@ -9,7 +9,7 @@ const WEAPONS: Dictionary = {
 	"feather_blade":   {"name": "Feather Blade",   "attack": 18, "defense": 3,  "speed": 8.0},
 }
 
-const RECIPES: Dictionary = {
+var RECIPES: Dictionary = {
 	"bone_club":         {"requires": {"wolf_fang": 3},                   "unlocked": true},
 	"tusk_blade":        {"requires": {"boar_tusk": 3, "wolf_fang": 1},   "unlocked": true},
 	"bear_claw_hammer":  {"requires": {"bear_claw": 2, "bear_pelt": 1},   "unlocked": false},
