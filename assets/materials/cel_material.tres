@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://assets/shaders/cel_shader.gdshader" id="1_celshader"]
+
+[resource]
+shader = ExtResource("1_celshader")
+shader_parameter/albedo = Color(1, 1, 1, 1)
+shader_parameter/use_texture = false
+shader_parameter/cel_steps = 3.0
+shader_parameter/specular_shininess = 32.0
+shader_parameter/shadow_color = Color(0.2, 0.2, 0.35, 1)
+shader_parameter/outline_width = 1.5
+shader_parameter/outline_color = Color(0, 0, 0, 1)
+shader_parameter/rim_width = 0.0
+shader_parameter/rim_color = Color(1, 1, 1, 1)
