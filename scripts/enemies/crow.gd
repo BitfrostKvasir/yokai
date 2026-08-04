@@ -31,7 +31,7 @@ func _physics_process(delta: float) -> void:
 		State.COOLDOWN:  _cooldown(delta)
 	move_and_slide()
 
-func _fly(delta: float) -> void:
+func _fly(_delta: float) -> void:
 	if player:
 		var target := player.global_position + Vector3(0, FLY_HEIGHT, 0)
 		var dir := (target - global_position).normalized()
@@ -64,7 +64,7 @@ func _drop_bomb() -> void:
 	state = State.COOLDOWN
 	state_timer = COOLDOWN_DURATION
 
-func _cooldown(delta: float) -> void:
+func _cooldown(_delta: float) -> void:
 	if player:
 		var target := player.global_position + Vector3(0, FLY_HEIGHT, 0)
 		var dir := (target - global_position).normalized()

@@ -49,7 +49,8 @@ func _face_player() -> void:
 		return
 	var look_pos := player.global_position
 	look_pos.y = global_position.y
-	look_at(look_pos, Vector3.UP)
+	if global_position.distance_to(look_pos) > 0.001:
+		look_at(look_pos, Vector3.UP)
 
 func _apply_gravity(delta: float) -> void:
 	if not is_on_floor():

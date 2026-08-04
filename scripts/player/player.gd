@@ -140,7 +140,8 @@ func _face_nearest_enemy() -> void:
 	if nearest:
 		var look_pos := nearest.global_position
 		look_pos.y = global_position.y
-		mesh.look_at(look_pos, Vector3.UP)
+		if global_position.distance_to(look_pos) > 0.001:
+			mesh.look_at(look_pos, Vector3.UP)
 
 func _hit_enemies_in_range(damage: int, knockback: bool) -> int:
 	var hit_count := 0
