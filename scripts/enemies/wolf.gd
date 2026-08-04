@@ -12,6 +12,7 @@ var state: State = State.PATROL
 var patrol_target: Vector3
 var cooldown_timer: float = 0.0
 var combo_left: int = 0
+var _combo_running: bool = false
 
 func _ready() -> void:
 	enemy_type = "wolf"
@@ -60,16 +61,19 @@ func _aggro(_delta: float) -> void:
 		velocity.z = dir.z * ATTACK_SPEED
 
 func _attack_state(_delta: float) -> void:
+	if _combo_running:
+		return
+	_combo_running = true
 	velocity.x = 0.0
 	velocity.z = 0.0
-	if combo_left > 0:
+	while combo_left > 0:
 		combo_left -= 1
 		if player and _get_player_distance() <= attack_range:
 			player.take_damage(attack_damage)
-		get_tree().create_timer(0.35).timeout
-	else:
-		cooldown_timer = ATTACK_COOLDOWN
-		state = State.COOLDOWN
+		await get_tree().create_timer(0.35).timeout
+	_combo_running = false
+	cooldown_timer = ATTACK_COOLDOWN
+	state = State.COOLDOWN
 
 func _cooldown(delta: float) -> void:
 	cooldown_timer -= delta
