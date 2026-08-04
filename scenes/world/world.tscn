@@ -53,6 +53,7 @@ loot_chest_scene = ExtResource("6_chest")
 
 [node name="Camera3D" type="Camera3D" parent="."]
 position = Vector3(10, 14, 10)
+groups = ["main_camera"]
 
 [node name="Moonlight" type="DirectionalLight3D" parent="."]
 rotation_degrees = Vector3(-45, -30, 0)
