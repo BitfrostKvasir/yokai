@@ -11,7 +11,7 @@
 [node name="World" parent="." instance=ExtResource("1_world")]
 
 [node name="Player" parent="." instance=ExtResource("2_player")]
-position = Vector3(0, 0, 0)
+position = Vector3(0, 2, 0)
 
 [node name="HUD" parent="." instance=ExtResource("3_hud")]
 
