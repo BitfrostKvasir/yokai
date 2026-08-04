@@ -12,6 +12,9 @@ const HEAVY_MULTIPLIER := 2.0
 const SP_GAIN_PER_HIT  := 15.0
 const ATTACK_RANGE     := 1.8
 const KNOCKBACK_FORCE  := 6.0
+const DODGE_SPEED     := 12.0
+const DODGE_DURATION  := 0.25
+const GUARD_REDUCTION := 0.5
 
 var stats: PlayerStats
 var is_invincible: bool = false
@@ -20,6 +23,8 @@ var combo_count: int = 0
 var combo_timer: float = 0.0
 var is_attacking: bool = false
 var hold_timer: float = 0.0
+var is_dodging: bool = false
+var is_guarding: bool = false
 
 @onready var mesh: Node3D = $Mesh
 
@@ -68,7 +73,10 @@ func _handle_movement() -> void:
 func take_damage(amount: int, _from_direction: Vector3 = Vector3.ZERO) -> void:
 	if is_invincible:
 		return
-	stats.take_damage(amount)
+	var final_amount := amount
+	if is_guarding:
+		final_amount = int(amount * GUARD_REDUCTION)
+	stats.take_damage(final_amount)
 
 func _on_weapon_changed(weapon_stats: Dictionary) -> void:
 	stats.apply_weapon(weapon_stats)
@@ -94,6 +102,12 @@ func _unhandled_input(event: InputEvent) -> void:
 			_do_attack(false)
 	if event.is_action_pressed("special"):
 		_do_special()
+	if event.is_action_pressed("dodge") and not is_dodging and not is_attacking:
+		_do_dodge()
+	if event.is_action_pressed("guard"):
+		is_guarding = true
+	if event.is_action_released("guard"):
+		is_guarding = false
 
 func _do_attack(heavy: bool) -> void:
 	is_attacking = true
@@ -140,3 +154,16 @@ func _do_special() -> void:
 	_hit_enemies_in_range(int(stats.attack * 3.0), true)
 	await get_tree().create_timer(0.8).timeout
 	is_attacking = false
+
+func _do_dodge() -> void:
+	is_dodging = true
+	is_invincible = true
+	var input_dir := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	var dir := (CAM_RIGHT * input_dir.x + CAM_FORWARD * -input_dir.y).normalized()
+	if dir.length() < 0.1:
+		dir = -mesh.global_transform.basis.z
+	velocity.x = dir.x * DODGE_SPEED
+	velocity.z = dir.z * DODGE_SPEED
+	await get_tree().create_timer(DODGE_DURATION).timeout
+	is_dodging = false
+	is_invincible = false
